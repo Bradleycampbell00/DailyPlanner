@@ -1,15 +1,15 @@
 let currentDay = $("#currentDay").text(luxon.DateTime.local().toFormat("ff"));
 let currentTime = parseInt(luxon.DateTime.local().toFormat("H"));
-
+console.log(currentTime)
 for (let i = 9; i < 18; i++) {
   $(".container").append(buildTimeSlot(i));
 }
-
+// how to create the individual time slots
 function buildTimeSlot(hour) {
   const $timeSlot = $("<div>")
-    .attr("id", "hour-" + hour)
+    .attr("id", hour)
     .attr("class", "row time-block hour");
-
+  // sets the hour for each time block
   const $timeLabel = $("<div>").attr("class", "col-md-1");
   if (hour > 12) {
     $timeLabel.text(hour - 12 + "PM");
@@ -18,18 +18,18 @@ function buildTimeSlot(hour) {
   } else {
     $timeLabel.text(hour + "AM");
   }
-
+  // creates the box to write in
   const $textArea = $("<textarea>").attr("class", "col-md-10 description");
-
+  // creates the button to be able to save the contents
   const $btn = $("<button>")
     .attr("class", "btn saveBtn col-md-1")
     .append($("<i>").attr("class", "fas fa-save"));
 
   $timeSlot.append($timeLabel, $textArea, $btn);
-
+  
   return $timeSlot;
 }
-
+// place to store local values
 const notes = {
     9:"",
     10:"",
@@ -47,22 +47,36 @@ const notes = {
 
 
 for (let i = 9; i < 18; i++) {
-    localStorage.getItem(i + "", "log into zoom")
+  $(`#${i} .description`).val(localStorage.getItem(i));
 }
 
 
 
 // listens for the save button to be clicked on
-$(".row").on("click", function(e){
+$(".saveBtn").on("click", function(e){
     // only functions on click for the save button
     // if (!e.target.matches(".saveBtn"))return;
-    var data = $("textarea").val();
-    var time = 
+    var data = $(this).siblings(".description").val();
+    var time = $(this).parent().attr("id")
     // for (let i = 9; i < 18; i++){
     //     let currentKey  = notes[i - 9]
-    //     localStorage.setItem(currentKey, JSON.stringify(data))
+        localStorage.setItem(time, data)
     //     console.log(currentKey)
     // }
 })
-                                              
+
+// sets the color for the time blocks
+function timeColor(){
+  $(".row").forEach(function(){
+   if (i < currentTime){
+   $(this).addClass(".past")
+  }else if ( i === currentTime){
+    $(this).addClass(".present")
+  }else if  ( i > currentTime) {
+    $(this).addClass(".future")
+  }
+});
+}
+
+var refresh = setInterval(timeColor, 1000)
 
