@@ -22,10 +22,17 @@ function buildTimeSlot(hour) {
   const $textArea = $("<textarea>").attr("class", "col-md-10 description");
   // creates the button to be able to save the contents
   const $btn = $("<button>")
-    .attr("class", "btn saveBtn col-md-1")
-    .append($("<i>").attr("class", "fas fa-save"));
-
+  .attr("class", "btn saveBtn col-md-1")
+  .append($("<i>").attr("class", "fas fa-save"));
+  
   $timeSlot.append($timeLabel, $textArea, $btn);
+  if (hour < currentTime){
+  $timeSlot.addClass("past")
+  }else if ( hour === currentTime){
+   $timeSlot.addClass("present")
+  }else if  ( hour > currentTime) {
+   $timeSlot.addClass("future")
+  }
   
   return $timeSlot;
 }
@@ -66,17 +73,10 @@ $(".saveBtn").on("click", function(e){
 })
 
 // sets the color for the time blocks
-function timeColor(){
-  $(".row").forEach(function(){
-   if (i < currentTime){
-   $(this).addClass(".past")
-  }else if ( i === currentTime){
-    $(this).addClass(".present")
-  }else if  ( i > currentTime) {
-    $(this).addClass(".future")
-  }
-});
-}
+// function timeColor(){
+//   $(".row").forEach(function(){
+// });
+// }
 
-var refresh = setInterval(timeColor, 1000)
+// var refresh = setInterval(timeColor, 1000)
 
